@@ -7,8 +7,8 @@ tf.app.flags.DEFINE_string("ps_hosts", "", "Comma-separated list of hostname:por
 tf.app.flags.DEFINE_string("worker_hosts", "", "Comma-separated list of hostname:port pairs")
 tf.app.flags.DEFINE_string("job_name", "", "One of 'ps', 'worker'")
 tf.app.flags.DEFINE_integer("task_index", 0, "Index of task within the job")
-tf.app.flags.DEFINE_integer("log_dir", "/tensor/log", "Index of task within the job")
-tf.app.flags.DEFINE_integer("data_dir", "/tensor/data", "Index of task within the job")
+tf.app.flags.DEFINE_string("log_dir", "/tensor/log", "dir save log")
+tf.app.flags.DEFINE_string("data_dir", "/tensor/data", "dir save data")
 
 FLAGS = tf.app.flags.FLAGS
 
