@@ -7,6 +7,8 @@ tf.app.flags.DEFINE_string("ps_hosts", "", "Comma-separated list of hostname:por
 tf.app.flags.DEFINE_string("worker_hosts", "", "Comma-separated list of hostname:port pairs")
 tf.app.flags.DEFINE_string("job_name", "", "One of 'ps', 'worker'")
 tf.app.flags.DEFINE_integer("task_index", 0, "Index of task within the job")
+tf.app.flags.DEFINE_integer("log_dir", "/tensor/log", "Index of task within the job")
+tf.app.flags.DEFINE_integer("data_dir", "/tensor/data", "Index of task within the job")
 
 FLAGS = tf.app.flags.FLAGS
 
@@ -14,6 +16,9 @@ def main(_):
     ps_hosts = FLAGS.ps_hosts.split(",")
     worker_hosts = FLAGS.worker_hosts.split(",")
 
+    log_dir = FLAGS.log_dir
+    data_dir = FLAGS.data_dir
+    
     # Create a cluster from the parameter server and worker hosts.
     cluster = tf.train.ClusterSpec({"ps": ps_hosts, "worker": worker_hosts})
 
@@ -32,7 +37,7 @@ def main(_):
                 cluster=cluster)):
 
             # Build model ...
-            mnist = input_data.read_data_sets("data", one_hot=True)
+            mnist = input_data.read_data_sets(data_dir, one_hot=True)
 
             # Create the model
             x = tf.placeholder(tf.float32, [None, 784])
@@ -59,7 +64,7 @@ def main(_):
 
         # Create a "Supervisor", which oversees the training process.
         sv = tf.train.Supervisor(is_chief=(FLAGS.task_index == 0),
-                                 logdir="/opt/tensor",
+                                 logdir=log_dir,
                                  init_op=init_op,
                                  summary_op=summary_op,
                                  saver = saver,
